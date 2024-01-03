@@ -1,0 +1,210 @@
+﻿drop database if exists BD_CONF;
+create database BD_CONF;
+  use BD_CONF;
+
+CREATE TABLE conferencia(
+Cod_conferencia int not null,
+Primary key (Cod_conferencia)
+);
+
+
+CREATE TABLE Status_participante (
+    Cod_status_participante INT NOT NULL,
+    Des_status  VARCHAR(20),
+    PRIMARY KEY (Cod_status_participante)
+);
+
+
+CREATE TABLE participante (
+    Cod_participante INT NOT NULL,
+    Nom_participante VARCHAR(50),
+    Des_email VARCHAR(50),
+    Cod_status_participante INT NOT NULL,
+    PRIMARY KEY (Cod_participante),
+    FOREIGN KEY (Cod_status_participante) REFERENCES Status_participante (Cod_status_participante)
+
+
+);
+
+
+CREATE TABLE conferencia_participante (
+    Cod_conferencia_participante INT NOT NULL,
+    Cod_conferencia  INT NOT NULL,
+    Cod_participante INT NOT NULL,
+    PRIMARY KEY (Cod_conferencia_participante),
+    FOREIGN KEY (Cod_participante) REFERENCES participante (Cod_participante),
+    FOREIGN KEY (Cod_conferencia) REFERENCES conferencia (Cod_conferencia)
+);
+
+
+CREATE TABLE artigo (
+    Cod_artigo INT NOT NULL,
+    Nom_artigo VARCHAR(50),
+    Dta_artigo DATE,
+    Num_artigo INT NOT NULL,
+    Hora_artigo TIME,
+    Cod_conferencia INT NOT NULL,
+    PRIMARY KEY (Cod_artigo),
+    FOREIGN KEY (Cod_conferencia) REFERENCES conferencia (Cod_conferencia)
+);
+
+
+CREATE TABLE autor (
+    Cod_autor INT NOT NULL,
+    Nom_autor VARCHAR(30),
+    PRIMARY KEY (Cod_autor)
+);
+
+
+CREATE TABLE artigo_autor (
+    Cod_artigo_autor INT NOT NULL,
+    Cod_artigo INT NOT NULL,
+    Cod_autor INT NOT NULL,
+    PRIMARY KEY (Cod_artigo_autor ),
+    FOREIGN KEY (Cod_artigo) REFERENCES artigo (Cod_artigo),
+    FOREIGN KEY (Cod_autor) REFERENCES autor (Cod_autor)
+);
+
+
+CREATE TABLE apresentacao (
+    Cod_apresentacao INT NOT NULL,
+    Dta_apresentacao DATE,
+    Hora_apresentacao TIME,
+    Des_sala  VARCHAR(10),
+    Cod_artigo INT NOT NULL,
+    PRIMARY KEY (Cod_apresentacao),
+    FOREIGN KEY (Cod_artigo) REFERENCES artigo (Cod_artigo)
+);
+
+
+CREATE TABLE Dados_aut (
+    Cod_dados INT NOT NULL,
+    Email_autor VARCHAR(60),
+    Tel_autor VARCHAR(30), 
+    Instituicao_autor VARCHAR(50),
+    Endereço_autor VARCHAR(50),
+    Des_sexo CHAR(1),
+    Cod_autor INT NOT NULL,
+    PRIMARY KEY (Cod_dados),
+    FOREIGN KEY (Cod_autor) REFERENCES autor (Cod_autor)
+);
+
+
+
+
+INSERT INTO Status_participante
+(Cod_status_participante, Des_status) VALUES
+(1, 'Estudante'),
+(2, 'Não estudante');
+
+
+
+
+# Inserir dados/valores nas tabelas
+INSERT INTO participante
+(Cod_participante, Nom_participante, Des_email, Cod_status_participante) VALUES
+(1, 'Gustavo', 'gustavo123@gmail.com', 2), 
+(2, 'Lais', 'lais123@gmail.com', 1),
+(3, 'Renally', 'renally123@gmail.com', 2),
+(4, 'Ivan', 'Ivan123@gmail.com', 2),
+(5, 'Maisa', 'maisa123@gmail.com', 1);
+
+
+INSERT INTO Status_participante
+(Cod_status_participante, Des_status) VALUES
+(1, 'Estudante'),
+(2, 'Não estudante');
+
+
+
+
+
+
+
+
+INSERT INTO conferencia
+(Cod_conferencia) VALUES
+(1);
+
+
+INSERT INTO conferencia_participante
+(Cod_conferencia_participante, Cod_conferencia, Cod_participante) VALUES
+(1, 1, 1);
+
+
+
+
+
+
+INSERT INTO artigo
+(Cod_artigo, Nom_artigo, Dta_artigo, Num_artigo, Hora_artigo, Cod_conferencia) VALUES
+(1, 'Ética na Inteligência Artificial', '2023-11-20', 1, '08:00:00', 1),
+(2, 'Realidade Virtual e Aumentada', '2023-11-20', 2, '09:00:00', 1),
+(3, 'A Era da Internet das Coisas', '2023-11-20', 3, '10:00:00', 1),
+(4, 'Inovações em Saúde Digital', '2023-11-20', 4, '11:00:00', 1),
+(5, 'A Evolução da Robótica', '2023-11-20', 5, '12:00:00', 1);
+
+
+INSERT INTO autor
+(Cod_autor, Nom_autor) VALUES
+(1, 'Ana Cruz'),
+(2, 'João Santos'),
+(3, 'Maria Alves'),
+(4, 'Pedro Sousa'),
+(5, 'Joana Matos');
+
+
+INSERT INTO Artigo_autor
+(Cod_artigo_autor, Cod_artigo, Cod_autor) VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 3),
+(4, 4, 4),
+(5, 5, 5);
+
+
+INSERT INTO Dados_aut
+(Cod_dados, Email_autor, Tel_autor, Instituicao_autor, Endereço_autor, Des_sexo, Cod_autor) VALUES
+(1, 'anacruz@gmail.com', '31972229081', 'PUC MINAS', 'RUA MARIA JOAQUINA 672 - BELO HORIZONTE', 'F', 1),
+(2, 'Joao25102@gmail.com', '31973988981', 'UFMG', 'AVE CARLOS LUZ 567 - BELO HORIZONTE', 'M', 2),
+(3, 'Mariaalves@outlook.com.br', '31978438765', 'RUA JOSE MENDONCA 657 - SANTA LUZIA', 'Newton paiva', 'F', 3),
+(4, 'Ph1541@hotmail.com', '3133638811', 'UNA', 'RUA JOAO ALVES MONTEIRO 324 - VESPASIANO', 'M', 4),
+(5, 'Joanamatos5@gmail.com', '3138578981', 'ESTACIO', 'RUA RENATO FRAGOSO 787 - CONTAGEM', 'F', 5);
+
+
+
+
+INSERT INTO apresentacao
+(Cod_apresentacao, Dta_apresentacao, Des_sala, Hora_apresentacao, Cod_artigo) VALUES
+(1,  '2023-11-20', 510,  '8:00:00', 1),
+(2,  '2023-11-20', 511, '9:00:00',2 ),
+(3,  '2023-11-20', 512, '10:00:00',3),
+(4,  '2023-11-20', 513, '11:00:00',4),
+(5,  '2023-11-20', 514, '12:00:00',5);
+
+
+
+
+
+
+
+
+# Mostrar o nome do autor com o artigo escrito
+
+
+SELECT Tautor.Nom_autor, TA.Nom_artigo FROM autor Tautor
+INNER JOIN artigo TA ON (Tautor.Cod_autor=TA.Cod_artigo);
+
+
+#  Mostrar o nome do participante, exibindo se ele é aluno ou não.
+
+
+SELECT PA.Nom_participante, SP.Des_status FROM participante PA
+INNER JOIN status_participante SP ON (PA.Cod_participante=SP.Cod_status_participante);
+
+
+# Mostra o nome da apresentação, com a hora e sala.
+
+
+SELECT Nartigo.Nom_artigo, AP.Hora_apresentacao, AP.Des_sala FROM artigo Nartigo
+INNER JOIN apresentacao AP ON (Nartigo.Cod_artigo=AP.Cod_apresentacao);
